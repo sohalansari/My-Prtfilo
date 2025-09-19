@@ -921,19 +921,19 @@
             }
         }
 
-        /* Preloader */
         .preloader {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: var(--gradient);
+            background: var(--light-color);
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 9999;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
         }
 
         .preloader.hidden {
@@ -941,13 +941,218 @@
             visibility: hidden;
         }
 
+        .preloader-content {
+            text-align: center;
+            position: relative;
+        }
+
+        .logo-wrapper {
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark-color);
+        }
+
+        .logo-icon {
+            margin-right: 12px;
+            color: var(--primary-color);
+            font-size: 3rem;
+        }
+
         .preloader-spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 30px;
+        }
+
+        .spinner-circle {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 3px solid transparent;
             border-radius: 50%;
-            border-top: 5px solid white;
-            animation: spin 1s linear infinite;
+            border-top: 3px solid var(--primary-color);
+            animation: spin 1.5s linear infinite;
+        }
+
+        .spinner-circle:nth-child(2) {
+            border: 3px solid transparent;
+            border-bottom: 3px solid var(--secondary-color);
+            animation: spin-reverse 2s linear infinite;
+        }
+
+        .spinner-circle:nth-child(3) {
+            width: 70%;
+            height: 70%;
+            top: 15%;
+            left: 15%;
+            border: 3px solid transparent;
+            border-right: 3px solid var(--primary-light);
+            animation: spin 2.5s linear infinite;
+        }
+
+        .progress-bar {
+            width: 280px;
+            height: 8px;
+            background: rgba(74, 108, 247, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 25px auto;
+            position: relative;
+        }
+
+        .progress-fill {
+            position: absolute;
+            height: 100%;
+            width: 0%;
+            background: var(--gradient);
+            border-radius: 10px;
+            transition: width 0.4s ease;
+        }
+
+        .preloader p {
+            font-size: 1.2rem;
+            color: var(--dark-color);
+            margin-top: 20px;
+            font-weight: 500;
+        }
+
+        .loading-dots {
+            display: inline-block;
+            margin-left: 5px;
+        }
+
+        .loading-dots span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            margin: 0 3px;
+            opacity: 0;
+            animation: bounce 1.5s infinite;
+        }
+
+        .loading-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .loading-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        .loading-text {
+            font-size: 1rem;
+            color: var(--primary-color);
+            margin-top: 15px;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spin-reverse {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(-360deg);
+            }
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+                opacity: 0.3;
+            }
+
+            50% {
+                transform: translateY(-10px);
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .preloader-content {
+            animation: pulse 2s infinite;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .preloader-spinner {
+                width: 60px;
+                height: 60px;
+            }
+
+            .progress-bar {
+                width: 220px;
+            }
+
+            .logo {
+                font-size: 2rem;
+            }
+
+            .logo-icon {
+                font-size: 2.5rem;
+            }
+
+            .preloader p {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .preloader-spinner {
+                width: 50px;
+                height: 50px;
+            }
+
+            .progress-bar {
+                width: 200px;
+            }
+
+            .logo {
+                font-size: 1.8rem;
+            }
+
+            .logo-icon {
+                font-size: 2.2rem;
+            }
+
+            .preloader p {
+                font-size: 1rem;
+            }
         }
 
         /* Particle animation for hero */
@@ -1135,8 +1340,30 @@
 <body>
     <!-- Preloader -->
     <div class="preloader" id="preloader">
-        <div class="preloader-spinner"></div>
+        <div class="preloader-content">
+            <div class="logo-wrapper">
+                <div class="logo">
+                    <i class="fas fa-code logo-icon"></i>
+                    Portfolio
+                </div>
+            </div>
+
+            <div class="preloader-spinner">
+                <div class="spinner-circle"></div>
+                <div class="spinner-circle"></div>
+                <div class="spinner-circle"></div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+
+            <p>Welcome to Sohal's Portfolio<span class="loading-dots"><span></span><span></span><span></span></span></p>
+
+            <div class="loading-text" id="loading-text">Loading amazing content</div>
+        </div>
     </div>
+
 
     <header>
         <div class="container">
@@ -1317,7 +1544,7 @@
             <div class="social-links">
                 <a href="https://www.linkedin.com/in/sohal-ansari-653a5b24a/"><i class="fab fa-linkedin-in"></i></a>
                 <a href="https://github.com/sohalansari"><i class="fab fa-github"></i></a>
-                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="./404.html"><i class="fab fa-twitter"></i></a>
                 <a href="https://www.instagram.com/sohail_____.02/"><i class="fab fa-instagram"></i></a>
             </div>
             <div class="footer-links">
@@ -1356,7 +1583,7 @@
                         </ul>
 
                         <div class="modal-actions">
-                            <a href="#" class="modal-action-btn btn-live" target="_blank">
+                            <a href="./404.html" class="modal-action-btn btn-live" target="_blank">
                                 <i class="fas fa-external-link-alt"></i> Go Live
                             </a>
                             <a href="https://github.com/sohalansari/Pankhudi-React.git"
@@ -1408,10 +1635,11 @@
                         </ul>
 
                         <div class="modal-actions">
-                            <a href="#" class="modal-action-btn btn-live" target="_blank">
+                            <a href="./404.html" class="modal-action-btn btn-live" target="_blank">
                                 <i class="fas fa-external-link-alt"></i> Go Live
                             </a>
-                            <a href="#" class="modal-action-btn btn-code" target="_blank" rel="noopener noreferrer">
+                            <a href="./404.html" class="modal-action-btn btn-code" target="_blank"
+                                rel="noopener noreferrer">
                                 <i class="fab fa-github"></i> View Code
                             </a>
 
@@ -1461,10 +1689,11 @@
                         </ul>
 
                         <div class="modal-actions">
-                            <a href="#" class="modal-action-btn btn-live" target="_blank">
+                            <a href="./404.html" class="modal-action-btn btn-live" target="_blank">
                                 <i class="fas fa-external-link-alt"></i> Go Live
                             </a>
-                            <a href="#" class="modal-action-btn btn-code" target="_blank" rel="noopener noreferrer">
+                            <a href="./404.html" class="modal-action-btn btn-code" target="_blank"
+                                rel="noopener noreferrer">
                                 <i class="fab fa-github"></i> View Code
                             </a>
 
@@ -1495,13 +1724,59 @@
     </div>
 
     <script>
-        // Preloader
-        window.addEventListener('load', () => {
+        document.addEventListener('DOMContentLoaded', function () {
             const preloader = document.getElementById('preloader');
-            setTimeout(() => {
-                preloader.classList.add('hidden');
-            }, 1500);
+            const progressFill = document.getElementById('progress-fill');
+            const loadingText = document.getElementById('loading-text');
+
+            const loadingMessages = [
+                "Loading amazing content",
+                "Preparing portfolio",
+                "Almost there",
+                "Getting everything ready"
+            ];
+
+            let progress = 0;
+            let messageIndex = 0;
+
+            // Simulate loading progress
+            const loadingInterval = setInterval(() => {
+                progress += Math.random() * 8;
+                if (progress > 100) progress = 100;
+
+                progressFill.style.width = progress + '%';
+
+                // Change loading message every 25% progress
+                if (progress > (messageIndex + 1) * 25) {
+                    messageIndex = Math.min(messageIndex + 1, loadingMessages.length - 1);
+                    loadingText.textContent = loadingMessages[messageIndex] + "...";
+                }
+
+                // Complete loading at 100%
+                if (progress >= 100) {
+                    clearInterval(loadingInterval);
+
+                    // Add a slight delay before hiding the preloader
+                    setTimeout(() => {
+                        preloader.classList.add('hidden');
+
+                        // Remove preloader from DOM after transition
+                        setTimeout(() => {
+                            preloader.style.display = 'none';
+                        }, 800);
+                    }, 500);
+                }
+            }, 200);
         });
+    </script>
+    <script>
+        // // Preloader
+        // window.addEventListener('load', () => {
+        //     const preloader = document.getElementById('preloader');
+        //     setTimeout(() => {
+        //         preloader.classList.add('hidden');
+        //     }, 1500);
+        // });
 
         // Create particle animation
         function createParticles() {
