@@ -302,6 +302,21 @@
             border: 5px solid white;
             box-shadow: var(--box-shadow);
             position: relative;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
         }
 
         .hero-image::before {
@@ -340,6 +355,38 @@
             flex-wrap: wrap;
         }
 
+        /* Typing animation */
+        .typewriter {
+            overflow: hidden;
+            border-right: .15em solid var(--primary-color);
+            white-space: nowrap;
+            margin: 0 auto;
+            letter-spacing: .15em;
+            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from {
+                width: 0
+            }
+
+            to {
+                width: 100%
+            }
+        }
+
+        @keyframes blink-caret {
+
+            from,
+            to {
+                border-color: transparent
+            }
+
+            50% {
+                border-color: var(--primary-color);
+            }
+        }
+
         /* About Section */
         .about-content {
             display: grid;
@@ -364,13 +411,30 @@
             gap: 10px;
             transition: var(--transition);
             cursor: default;
+            transform: scale(1);
+            animation: pulse 2s infinite;
         }
 
         .skill:hover {
-            transform: translateY(-5px);
+            transform: translateY(-5px) scale(1.05);
             box-shadow: var(--box-shadow-hover);
             background: var(--gradient);
             color: white;
+            animation: none;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.03);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
 
         .skill i {
@@ -410,6 +474,13 @@
             transition: var(--transition);
             cursor: pointer;
             position: relative;
+            transform: translateY(50px);
+            opacity: 0;
+        }
+
+        .project-card.animate-in {
+            transform: translateY(0);
+            opacity: 1;
         }
 
         .project-card::before {
@@ -850,6 +921,66 @@
             }
         }
 
+        /* Preloader */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .preloader-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            border-top: 5px solid white;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Particle animation for hero */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--primary-color);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: floatParticle 15s infinite linear;
+        }
+
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 0.3;
+            }
+
+            100% {
+                transform: translateY(-100vh) translateX(100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
         /* Responsive Styles - FIXED MODAL ISSUES */
         @media (max-width: 992px) {
 
@@ -1002,6 +1133,11 @@
 </head>
 
 <body>
+    <!-- Preloader -->
+    <div class="preloader" id="preloader">
+        <div class="preloader-spinner"></div>
+    </div>
+
     <header>
         <div class="container">
             <nav>
@@ -1024,10 +1160,13 @@
 
     <main>
         <section id="home" class="hero">
+            <!-- Particle animation -->
+            <div class="particles" id="particles"></div>
+
             <div class="container">
                 <div class="hero-content">
                     <img src="./images/Sohal.png" alt="Sohal Ansari" class="hero-image">
-                    <h1>Hi, I'm Sohal Ansari</h1>
+                    <h1>Hi, I'm <span class="typewriter">Sohal Ansari</span></h1>
                     <p>A passionate Full Stack Developer with expertise in creating dynamic and user-friendly web
                         applications.</p>
                     <div class="hero-buttons">
@@ -1356,6 +1495,47 @@
     </div>
 
     <script>
+        // Preloader
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            setTimeout(() => {
+                preloader.classList.add('hidden');
+            }, 1500);
+        });
+
+        // Create particle animation
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 30;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+
+                // Random size between 5 and 15px
+                const size = Math.random() * 10 + 5;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+
+                // Random position
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+
+                // Random color from gradient
+                const colors = ['#4a6cf7', '#6a88ff', '#6f42c1', '#8e6cff'];
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+                // Random animation duration
+                const duration = Math.random() * 10 + 15;
+                particle.style.animationDuration = `${duration}s`;
+
+                // Random delay
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+
+                particlesContainer.appendChild(particle);
+            }
+        }
+
         // Smooth scroll for internal links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -1409,13 +1589,15 @@
 
         // Intersection Observer for scroll animations
         const sections = document.querySelectorAll('section');
+        const projectCards = document.querySelectorAll('.project-card');
+
         const observerOptions = {
             root: null,
             rootMargin: '0px',
             threshold: 0.2
         };
 
-        const observer = new IntersectionObserver((entries, observer) => {
+        const sectionObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('animate-in');
@@ -1425,7 +1607,23 @@
         }, observerOptions);
 
         sections.forEach(section => {
-            observer.observe(section);
+            sectionObserver.observe(section);
+        });
+
+        // Observer for project cards with staggered animation
+        const cardObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('animate-in');
+                    }, index * 200); // Stagger the animation
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        projectCards.forEach(card => {
+            cardObserver.observe(card);
         });
 
         // Project Modals
@@ -1555,6 +1753,9 @@
                 menuToggle.querySelector('i').classList.remove('fa-times');
             }
         });
+
+        // Initialize animations
+        createParticles();
     </script>
 </body>
 
